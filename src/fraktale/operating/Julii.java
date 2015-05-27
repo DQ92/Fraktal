@@ -49,13 +49,11 @@ public class Julii extends Fractal implements Runnable {
 
         for (int y = 0; y < HEIGHT; y++) {
 
-                 //p_im = minY +  i * ratioY;
             double c_im = MAXIM - y * IM_FACTOR;
             
             for (int x = 0; x < WIDTH; x++) {
                 pb.setValue(y);
 
-                      //p_re = minX +  j * ratioX;
                 double c_re = MINRE + x * RE_FACTOR;
                 double Z_re = c_re, Z_im = c_im;
 
@@ -71,7 +69,6 @@ public class Julii extends Fractal implements Runnable {
                         break;
                     }
                     
-                    //temp-y
                     Z_im = 2 * Z_re * Z_im + C_im;
                     Z_re = Z_re2 - Z_im2 + C_re;
 
@@ -88,5 +85,4 @@ public class Julii extends Fractal implements Runnable {
         this.label.setIcon(new ImageIcon(img));
         this.pb.setVisible(false);
     }
-
 }

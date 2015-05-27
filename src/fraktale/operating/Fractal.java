@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fraktale.operating;
 
 import java.awt.Color;
@@ -13,10 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 
-/**
- *
- * @author Daniel
- */
 public class Fractal {
     
     /**
@@ -40,10 +31,10 @@ public class Fractal {
     protected int MAX_ITER = 20;
     protected double zoom = 2;
 
-    BufferedImage img;
+    protected BufferedImage img;
     protected int[] colors;
-    JProgressBar pb;
-    JLabel label;
+    protected JProgressBar pb;
+    protected JLabel label;
     
     
     public Fractal(JProgressBar pb, JLabel label){

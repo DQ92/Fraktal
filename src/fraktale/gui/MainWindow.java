@@ -14,16 +14,15 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Daniel
  */
-public class MainWindow extends javax.swing.JFrame implements MouseMotionListener, MouseListener, ChangeListener {
+public class MainWindow extends JFrame implements MouseMotionListener, MouseListener {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -32,6 +31,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseMotionListene
     private final Julii mJulii;
     private final Fractal mFractal;    
     
+    // max value in TextField
     private static final int MAX_TO_COMPUTE = 10000;
     
     int x1, x2, y1, y2;
@@ -278,39 +278,40 @@ public class MainWindow extends javax.swing.JFrame implements MouseMotionListene
         startRender(new Point(x, y));
     }
 
-    
+    /**
+     * Start render choosen fractal in Thread
+     * @param p 
+     */
     public void startRender(Point p){
         
         String method = (String) jComboBox1.getSelectedItem();
         
         int i = getMaxIterFromText();
         if (i > MAX_TO_COMPUTE) {
-            JOptionPane.showMessageDialog(this, "Wartość " + i + " jest zbyt duża.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Wartość " + i + " jest zbyt duża.", 
+                                                    "Błąd", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         switch (method) {
             case "Mandelbrot":
-                
                 mMandelbrot.setMaxIter(i);
-
                 if(p!=null)
                     mMandelbrot.setView(p, i, true);    
                 else
                     mMandelbrot.resetValues();
-                
                 new Thread(mMandelbrot).start();
+                
             break;
                 
             case "Julii":
-
                 mJulii.setMaxIter(i);
                 if (p != null)
                     mJulii.setView(p, i, true);
                 else
-                    mJulii.resetValues();
-                
+                    mJulii.resetValues();              
                 new Thread(mJulii).start();
+                
             break;
         }
     }
@@ -342,9 +343,6 @@ public class MainWindow extends javax.swing.JFrame implements MouseMotionListene
     @Override
     public void mouseExited(MouseEvent e) {}
 
-    @Override
-    public void changed(ObservableValue ov, Object t, Object t1) {}
-    
     
     @Override
     public void paint(final Graphics g) {
@@ -361,9 +359,9 @@ public class MainWindow extends javax.swing.JFrame implements MouseMotionListene
             }
         }
 
+        g.setColor(Color.BLUE);
         g.drawRect(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1));
-
-    }
+   }
 
     
     public int sgn(int x) {

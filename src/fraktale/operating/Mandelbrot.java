@@ -32,6 +32,9 @@ public class Mandelbrot extends Fractal implements Runnable {
     }
     
     
+    /**
+     * new Thread for render 
+     */
     @Override
     public synchronized void run() {
         pb.setMinimum(0);
@@ -49,13 +52,11 @@ public class Mandelbrot extends Fractal implements Runnable {
 
         for (int y = 0; y < HEIGHT; y++) {
             
-                 //p_im = minY +  i * ratioY;
             double c_im = MAXIM - y * IM_FACTOR;
             
             for (int x = 0; x < WIDTH; x++) {
                 pb.setValue(y);
 
-                     //p_re = minX +  j * ratioX;
                 double c_re = MINRE + x * RE_FACTOR;
                 double Z_re = c_re, Z_im = c_im;
                 
@@ -71,7 +72,6 @@ public class Mandelbrot extends Fractal implements Runnable {
                         break;
                     }
                     
-                    //temp-y
                     Z_im = 2 * Z_re * Z_im + c_im;
                     Z_re = Z_re2 - Z_im2 + c_re;
 
