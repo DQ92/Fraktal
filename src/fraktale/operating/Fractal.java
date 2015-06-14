@@ -2,8 +2,6 @@ package fraktale.operating;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
@@ -24,14 +22,14 @@ public class Fractal {
     protected double MINIM = -1.1;
     protected double MAXIM = MINIM + (MAXRE - MINRE) * HEIGHT / WIDTH;
     
-    //the distance between adjacent x and y coordinates
+
     protected double RE_FACTOR = (MAXRE - MINRE) / (WIDTH - 1);
     protected double IM_FACTOR = (MAXIM - MINIM) / (HEIGHT - 1);
 
     protected int MAX_ITER = 20;
     protected double zoom = 2;
 
-    protected BufferedImage img;
+    //protected BufferedImage img;
     protected int[] colors;
     protected JProgressBar pb;
     protected JLabel label;
@@ -94,11 +92,6 @@ public class Fractal {
         this.WIDTH = w;
         this.HEIGHT = h;
         refactor();
-    }
-
-    
-    public RenderedImage getBuffer() {
-        return this.img;
     }
 
 }

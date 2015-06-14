@@ -5,7 +5,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
-public class Julii extends Fractal implements Runnable {
+public class MandelbrotIII extends Fractal implements Runnable {
+    
+    private int LEVEL = 2;
     protected BufferedImage img;
     
     /**
@@ -15,12 +17,29 @@ public class Julii extends Fractal implements Runnable {
      * @param label
      * @param img
      */
-    public Julii(JProgressBar pb, JLabel label, BufferedImage img) {
+    public MandelbrotIII(JProgressBar pb, JLabel label, BufferedImage img) {
         super(pb, label);
         this.img = img;
     }
 
-    
+    /**
+     * Reset default values
+     */
+    public void resetValues() {
+
+        MINRE = -2.5;
+        MAXRE = 2.8;
+        MINIM = -1.5;
+
+        zoom = 3;
+        
+        this.LEVEL = 2;
+        refactor();
+    }
+
+    /**
+     * new Thread for render
+     */
     @Override
     public synchronized void run() {
         pb.setMinimum(0);
@@ -30,29 +49,15 @@ public class Julii extends Fractal implements Runnable {
         renderFractal();
     }
 
-    /**
-     * Reset default values
-     */
-    public void resetValues() {
-        MINRE = -2.2;
-        MAXRE = 1.5;
-        MINIM = -1.1;
-        zoom = 2;
-        refactor();
-    }
-        
-
     public void renderFractal() {
         color();
-        //this.img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-        double C_re = -0.123;
-        double C_im = 0.745;
+        //this.img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < HEIGHT; y++) {
 
             double c_im = MAXIM - y * IM_FACTOR;
-            
+
             for (int x = 0; x < WIDTH; x++) {
                 pb.setValue(y);
 
@@ -65,14 +70,28 @@ public class Julii extends Fractal implements Runnable {
                 while (iteration < MAX_ITER) {
 
                     double Z_re2 = Z_re * Z_re, Z_im2 = Z_im * Z_im;
+                    
+                    double ztmp_re = Z_re, ztmp_im = Z_im;
 
+                    double tmp_re, tmp_im;
+                    
+                    for(int i=0; i<LEVEL; i++){
+                        
+                        tmp_re = Z_re * ztmp_re - Z_im * ztmp_im;
+                        tmp_im = Z_re * ztmp_im + ztmp_re * Z_im;
+                        
+                        Z_re = tmp_re;
+                        Z_im = tmp_im;
+                        
+                    }
+                    
                     if (Z_re2 + Z_im2 > 4) {
                         partSet = false;
                         break;
                     }
                     
-                    Z_im = 2 * Z_re * Z_im + C_im;
-                    Z_re = Z_re2 - Z_im2 + C_re;
+                    Z_im += c_im;
+                    Z_re += c_re;
 
                     iteration++;
                 }
@@ -86,5 +105,9 @@ public class Julii extends Fractal implements Runnable {
 
         this.label.setIcon(new ImageIcon(img));
         this.pb.setVisible(false);
+    }
+    
+    public void setLevel(int level){
+        this.LEVEL = level;
     }
 }

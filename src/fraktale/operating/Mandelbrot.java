@@ -7,15 +7,18 @@ import javax.swing.JProgressBar;
 
 public class Mandelbrot extends Fractal implements Runnable {
     
+    protected BufferedImage img;
     
     /**
      * Default values
      *
      * @param pb
      * @param label
+     * @param img
      */
-    public Mandelbrot(JProgressBar pb, JLabel label) {
+    public Mandelbrot(JProgressBar pb, JLabel label, BufferedImage img) {
         super(pb, label);
+        this.img = img;
     }
 
     
@@ -48,7 +51,7 @@ public class Mandelbrot extends Fractal implements Runnable {
     public void renderFractal() {
         color();
         
-        this.img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        //this.img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < HEIGHT; y++) {
             

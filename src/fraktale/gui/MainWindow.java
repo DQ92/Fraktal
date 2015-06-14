@@ -3,12 +3,14 @@ package fraktale.gui;
 import fraktale.operating.Fractal;
 import fraktale.operating.Julii;
 import fraktale.operating.Mandelbrot;
+import fraktale.operating.MandelbrotIII;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -29,10 +31,13 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
     
     private final Mandelbrot mMandelbrot;
     private final Julii mJulii;
+    private final MandelbrotIII mMandelbrotIII;
     private final Fractal mFractal;    
     
     // max value in TextField
     private static final int MAX_TO_COMPUTE = 10000;
+    
+    protected BufferedImage img;
     
     int x1, x2, y1, y2;
     
@@ -57,9 +62,11 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
         mFractal = new Fractal(jProgressBar1, jLabel);
         mFractal.setSize(WIDTH, HEIGHT);
         
+        img = new BufferedImage(WIDTH, 480, BufferedImage.TYPE_INT_RGB);
         
-        mMandelbrot = new Mandelbrot(jProgressBar1, jLabel);
-        mJulii = new Julii(jProgressBar1, jLabel);
+        mMandelbrot = new Mandelbrot(jProgressBar1, jLabel, img);
+        mJulii = new Julii(jProgressBar1, jLabel, img);
+        mMandelbrotIII = new MandelbrotIII(jProgressBar1, jLabel, img);
         
     }
     
@@ -105,7 +112,12 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
         jTextFieldMax.setName(""); // NOI18N
         jTextFieldMax.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mandelbrot", "Julii" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mandelbrot", "Julii" , "Mandelbrot Cubic", "Mandelbrot Quadratur", "Mandelbrot Penta" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jButtonSave.setText("Zapisz");
         jButtonSave.setPreferredSize(new java.awt.Dimension(80, 20));
@@ -214,7 +226,7 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
 
         File f = new File(method + "_" + time + ".png");
         try {
-            ImageIO.write(mMandelbrot.getBuffer(), "PNG", f);
+            ImageIO.write(img, "PNG", f);
 
             String path = f.getAbsolutePath();
             JOptionPane.showMessageDialog(this, "Zapisano w: " + path, "Zapisano", JOptionPane.INFORMATION_MESSAGE);
@@ -239,6 +251,10 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
                   "O aplikacji", JOptionPane.OK_OPTION);
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     @Override
@@ -291,6 +307,7 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
             JOptionPane.showMessageDialog(this, "Wartość " + i + " jest zbyt duża.", 
                                                     "Błąd", JOptionPane.ERROR_MESSAGE);
             return;
+            
         }
 
         switch (method) {
@@ -313,6 +330,42 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
                 new Thread(mJulii).start();
                 
             break;
+               case "Mandelbrot Cubic":
+                mMandelbrotIII.setMaxIter(i);
+                if (p != null) {
+                    mMandelbrotIII.setView(p, i, true);
+                } else {
+                    mMandelbrotIII.resetValues();
+                }
+                mMandelbrotIII.setLevel(2);
+                new Thread(mMandelbrotIII).start();
+
+            break; 
+                   
+            case "Mandelbrot Quadratur":
+                mMandelbrotIII.setMaxIter(i);
+                if (p != null) {
+                    mMandelbrotIII.setView(p, i, true);
+                } else {
+                    mMandelbrotIII.resetValues();
+                }
+                mMandelbrotIII.setLevel(3);
+                new Thread(mMandelbrotIII).start();
+
+            break;
+                
+            case "Mandelbrot Penta":
+                mMandelbrotIII.setMaxIter(i);
+                if (p != null) {
+                    mMandelbrotIII.setView(p, i, true);
+                } else {
+                    mMandelbrotIII.resetValues();
+                }
+                mMandelbrotIII.setLevel(4);
+                new Thread(mMandelbrotIII).start();
+
+            break;
+                   
         }
     }
     
@@ -332,6 +385,27 @@ public class MainWindow extends JFrame implements MouseMotionListener, MouseList
                 mJulii.resetValues();
                 
                 new Thread(mJulii).start();
+            break;
+                
+            case "Mandelbrot Cubic":
+                mMandelbrotIII.resetValues();
+                mMandelbrotIII.setLevel(2);
+                new Thread(mMandelbrotIII).start();
+
+            break;
+
+            case "Mandelbrot Quadratur":
+                mMandelbrotIII.resetValues();
+                mMandelbrotIII.setLevel(3);
+                new Thread(mMandelbrotIII).start();
+
+            break;
+
+            case "Mandelbrot Penta":
+                mMandelbrotIII.resetValues();
+                mMandelbrotIII.setLevel(4);
+                new Thread(mMandelbrotIII).start();
+
             break;
         }   
     }
